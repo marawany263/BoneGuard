@@ -1,0 +1,3 @@
+.density-panel { min-height: 340px; }
+.analysis-panel { min-height: 340px; }
+.exercise-panel, .daily-panel { min-height: 285px; }

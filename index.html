@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07111f">
+  <meta name="description" content="BoneGuard is a simulated astronaut bone-health monitoring dashboard.">
+  <title>BoneGuard | Mission Health</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Main navigation">
+      <a class="brand" href="#overview" data-view="overview" aria-label="BoneGuard overview">
+        <span class="brand-mark"><i class="fa-solid fa-bone"></i></span>
+        <span><strong>BoneGuard</strong><small>MISSION HEALTH</small></span>
+      </a>
+      <div class="mission-chip"><span class="live-dot"></span> MISSION BG-2026-01</div>
+      <nav class="nav-list">
+        <span class="nav-label">WORKSPACE</span>
+        <a class="nav-link active" href="#overview" data-view="overview"><i class="fa-solid fa-grid-2"></i> Overview</a>
+        <a class="nav-link" href="#monitoring" data-view="monitoring"><i class="fa-solid fa-wave-square"></i> Bone monitoring</a>
+        <a class="nav-link" href="#exercise" data-view="exercise"><i class="fa-solid fa-dumbbell"></i> Exercise</a>
+        <a class="nav-link" href="#nutrition" data-view="nutrition"><i class="fa-solid fa-carrot"></i> Nutrition</a>
+        <a class="nav-link" href="#alerts" data-view="alerts"><i class="fa-regular fa-bell"></i> Alert center <span class="nav-count" id="nav-alert-count">0</span></a>
+        <span class="nav-label nav-label-spaced">RESEARCH</span>
+        <a class="nav-link" href="#gravity" data-view="gravity"><i class="fa-solid fa-orbit"></i> Gravity lab</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-profile">
+          <div class="avatar">AM</div>
+          <div><strong>Alex Morgan</strong><small>Flight crew · Commander</small></div>
+          <i class="fa-solid fa-ellipsis"></i>
+        </div>
+        <div class="sidebar-foot"><span class="status-pulse"></span> SYSTEMS NOMINAL <span>v1.0</span></div>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="icon-button mobile-menu" id="menu-toggle" aria-label="Open navigation"><i class="fa-solid fa-bars"></i></button>
+          <div class="breadcrumb"><span>MISSION CONTROL</span><i class="fa-solid fa-chevron-right"></i><strong id="breadcrumb-current">Overview</strong></div>
+        </div>
+        <div class="topbar-right">
+          <div class="mission-clock"><span class="live-dot"></span><span id="mission-clock">--:-- UTC</span></div>
+          <button class="icon-button alert-shortcut" id="alert-shortcut" aria-label="Open alerts"><i class="fa-regular fa-bell"></i><span class="notification-dot" id="header-alert-dot"></span></button>
+          <div class="top-avatar">AM</div>
+        </div>
+      </header>
+
+      <div class="content">
+        <section class="view-section active" id="view-overview" data-title="Overview">
+          <div class="page-heading">
+            <div><div class="eyebrow"><span class="live-dot"></span> FLIGHT DAY 120 <span class="eyebrow-divider">/</span> MICROGRAVITY</div><h1>Good morning, Alex <span class="wave">✦</span></h1><p>Your bone health snapshot for today, <span id="today-label"></span>.</p></div>
+            <div class="heading-actions"><span class="sim-badge"><i class="fa-solid fa-flask"></i> SIMULATED DATA</span><button class="button button-quiet" data-nav="monitoring"><i class="fa-solid fa-plus"></i> Add reading</button></div>
+          </div>
+
+          <div class="stat-grid">
+            <article class="stat-card status-stat"><div class="stat-top"><span class="stat-label">BONE HEALTH STATUS</span><span class="stat-icon cyan"><i class="fa-solid fa-shield-heart"></i></span></div><div class="stat-main"><strong id="health-status">Stable</strong><span class="status-pill" id="health-status-pill">ON TRACK</span></div><div class="stat-foot"><span class="trend neutral"><i class="fa-solid fa-minus"></i> Monitoring</span><span>Rule-based indicator</span></div></article>
+            <article class="stat-card"><div class="stat-top"><span class="stat-label">ESTIMATED BONE DENSITY</span><span class="stat-icon blue"><i class="fa-solid fa-bone"></i></span></div><div class="stat-main"><strong id="density-value">—</strong><span class="stat-unit">g/cm²</span></div><div class="stat-foot"><span class="trend" id="density-change">—</span><span>Latest model estimate</span></div></article>
+            <article class="stat-card"><div class="stat-top"><span class="stat-label">EXERCISE TODAY</span><span class="stat-icon violet"><i class="fa-solid fa-dumbbell"></i></span></div><div class="stat-main"><strong id="exercise-value">—</strong><span class="stat-unit">sessions</span></div><div class="stat-foot"><span class="trend neutral" id="exercise-progress">—</span><span>Daily activity plan</span></div></article>
+            <article class="stat-card"><div class="stat-top"><span class="stat-label">CALCIUM INTAKE</span><span class="stat-icon amber"><i class="fa-solid fa-capsules"></i></span></div><div class="stat-main"><strong id="calcium-value">—</strong><span class="stat-unit">mg today</span></div><div class="stat-foot"><span class="trend neutral" id="calcium-progress">—</span><span>Demo target: 1,000 mg</span></div></article>
+          </div>
+
+          <div class="dashboard-grid">
+            <article class="panel chart-panel density-panel">
+              <div class="panel-heading"><div><div class="panel-kicker">LONGITUDINAL VIEW</div><h2>Bone density trend</h2><p>Simulated estimate from clinical-style readings</p></div><span class="chart-legend"><i></i> Estimated density</span></div>
+              <div class="chart-wrap large-chart"><canvas id="density-chart" aria-label="Bone density trend chart"></canvas></div>
+              <div class="chart-note"><i class="fa-solid fa-circle-info"></i> No wearable device directly measures bone density. Estimates are illustrative.</div>
+            </article>
+            <article class="panel analysis-panel">
+              <div class="panel-heading"><div><div class="panel-kicker">RULE-BASED SUMMARY</div><h2><i class="fa-solid fa-sparkles accent-icon"></i> Health analysis</h2></div><span class="analysis-tag">DEMO</span></div>
+              <div class="analysis-status" id="analysis-status"><span class="analysis-status-icon"><i class="fa-solid fa-check"></i></span><div><strong>Reviewing trends</strong><small>Based on recorded demo data</small></div></div>
+              <div id="analysis-findings" class="analysis-findings"></div>
+              <div class="disclaimer"><i class="fa-solid fa-circle-info"></i><span>Transparent rules only—not a medically validated AI model. For education, not clinical decisions.</span></div>
+            </article>
+          </div>
+
+          <div class="lower-grid">
+            <article class="panel exercise-panel">
+              <div class="panel-heading"><div><div class="panel-kicker">MOVEMENT & RESISTANCE</div><h2>Exercise progress</h2></div><button class="text-button" data-nav="exercise">View schedule <i class="fa-solid fa-arrow-right"></i></button></div>
+              <div class="chart-wrap short-chart"><canvas id="exercise-chart" aria-label="Weekly exercise progress chart"></canvas></div>
+              <div class="exercise-summary"><span><i class="dot dot-cyan"></i> Completed</span><span><i class="dot dot-muted"></i> Planned</span><strong id="weekly-total">—</strong></div>
+            </article>
+            <article class="panel daily-panel">
+              <div class="panel-heading"><div><div class="panel-kicker">TODAY’S INTAKE</div><h2>Nutrition snapshot</h2></div><button class="text-button" data-nav="nutrition">Log food <i class="fa-solid fa-arrow-right"></i></button></div>
+              <div class="nutrient-row"><div class="nutrient-heading"><span><i class="fa-solid fa-bone nutrient-calcium"></i> Calcium</span><strong id="dashboard-calcium-text">—</strong></div><div class="progress-track"><div class="progress-fill calcium-fill" id="dashboard-calcium-bar"></div></div><small>Daily demo target: 1,000 mg</small></div>
+              <div class="nutrient-row"><div class="nutrient-heading"><span><i class="fa-solid fa-sun nutrient-vitd"></i> Vitamin D</span><strong id="dashboard-vitd-text">—</strong></div><div class="progress-track"><div class="progress-fill vitd-fill" id="dashboard-vitd-bar"></div></div><small>Daily demo target: 15 µg</small></div>
+              <div class="mini-alert" id="dashboard-alert"><span class="mini-alert-icon"><i class="fa-solid fa-circle-check"></i></span><div><strong>All clear</strong><small>No new alerts right now</small></div><button class="icon-button" data-nav="alerts" aria-label="View alerts"><i class="fa-solid fa-arrow-right"></i></button></div>
+            </article>
+          </div>
+          <footer class="page-footer">BoneGuard prototype · All displayed astronaut data is fictional and simulated.</footer>
+        </section>
+
+        <section class="view-section" id="view-monitoring" data-title="Bone monitoring">
+          <div class="page-heading"><div><div class="eyebrow">LONGITUDINAL HEALTH RECORD</div><h1>Bone monitoring</h1><p>Review simulated density estimates and lab readings. Add a new record below.</p></div><span class="sim-badge"><i class="fa-solid fa-flask"></i> SIMULATED DATA</span></div>
+          <div class="callout info-callout"><i class="fa-solid fa-circle-info"></i><div><strong>Data sources matter</strong><p>Density values below are illustrative estimates; calcium and vitamin D are modeled as laboratory readings. No smartwatch or wearable is represented as measuring bone density.</p></div></div>
+          <div class="site-health-grid">
+            <article class="site-health-card"><span class="site-health-icon hip"><i class="fa-solid fa-bone"></i></span><div><small>HIP · ESTIMATED</small><strong id="hip-density">—</strong><span>g/cm² · <em id="hip-date">—</em></span></div><span class="site-health-mark">SITE</span></article>
+            <article class="site-health-card"><span class="site-health-icon leg"><i class="fa-solid fa-person-walking"></i></span><div><small>LEG · ESTIMATED</small><strong id="leg-density">—</strong><span>g/cm² · <em id="leg-date">—</em></span></div><span class="site-health-mark">SITE</span></article>
+            <article class="site-health-card"><span class="site-health-icon whole"><i class="fa-solid fa-person"></i></span><div><small>WHOLE BODY · ESTIMATED</small><strong id="whole-density">—</strong><span>g/cm² · <em id="whole-date">—</em></span></div><span class="site-health-mark">SITE</span></article>
+          </div>
+          <div class="monitoring-grid">
+            <article class="panel monitor-chart-panel"><div class="panel-heading"><div><div class="panel-kicker">ESTIMATED INDICATOR</div><h2>Bone density by site</h2><p>Fictional values shown for educational demonstration</p></div><span class="chart-legend multi"><i></i> Whole body <i class="legend-hip"></i> Hip <i class="legend-leg"></i> Leg</span></div><div class="chart-wrap monitor-chart"><canvas id="monitor-density-chart" aria-label="Estimated bone density monitoring chart"></canvas></div></article>
+            <article class="panel lab-panel"><div class="panel-heading"><div><div class="panel-kicker">LAB-STYLE READINGS</div><h2>Calcium & vitamin D</h2><p>Simulated historical records</p></div></div><div class="chart-wrap lab-chart"><canvas id="lab-chart" aria-label="Simulated calcium and vitamin D readings chart"></canvas></div></article>
+          </div>
+          <article class="panel record-panel"><div class="panel-heading"><div><div class="panel-kicker">NEW RECORD</div><h2>Add monitoring reading</h2><p>Enter a simulated record; units and source are clearly labeled.</p></div></div>
+            <form id="reading-form" class="form-grid">
+              <label>Reading date<input type="date" name="date" id="reading-date" required></label>
+              <label>Estimated density (g/cm²)<input type="number" name="density" min="0.1" max="3" step="0.001" placeholder="1.042" required></label>
+              <label>Body site<select name="site"><option>Whole body</option><option>Hip</option><option>Leg</option></select></label>
+              <label>Serum calcium (mg/dL)<input type="number" name="calcium" min="4" max="16" step="0.1" placeholder="9.4" required></label>
+              <label>25-OH vitamin D (ng/mL)<input type="number" name="vitaminD" min="0" max="150" step="0.1" placeholder="31.0" required></label>
+              <div class="form-action"><button class="button button-primary" type="submit"><i class="fa-solid fa-floppy-disk"></i> Save reading</button><span class="form-feedback" id="reading-feedback" aria-live="polite"></span></div>
+            </form>
+          </article>
+          <article class="panel records-panel"><div class="panel-heading"><div><div class="panel-kicker">HISTORY</div><h2>Health records</h2></div><span class="record-count" id="record-count">—</span></div><div class="table-wrap"><table><thead><tr><th>DATE</th><th>BODY SITE</th><th>EST. DENSITY</th><th>CALCIUM · LAB</th><th>VITAMIN D · LAB</th><th>SOURCE</th></tr></thead><tbody id="records-body"></tbody></table></div></article>
+        </section>
+
+        <section class="view-section" id="view-exercise" data-title="Exercise">
+          <div class="page-heading"><div><div class="eyebrow">RESISTANCE & MOVEMENT</div><h1>Exercise plan</h1><p>Track a simulated daily schedule and weekly activity.</p></div><span class="sim-badge"><i class="fa-solid fa-flask"></i> EDUCATIONAL DEMO</span></div>
+          <div class="callout warning-callout"><i class="fa-solid fa-triangle-exclamation"></i><div><strong>Educational suggestions only</strong><p>These example activities are not prescriptions. Actual astronaut training plans must be approved by qualified spaceflight medical and exercise specialists.</p></div></div>
+          <div class="exercise-layout">
+            <article class="panel schedule-panel"><div class="panel-heading"><div><div class="panel-kicker">TODAY · FLIGHT DAY 120</div><h2>Daily schedule</h2><p id="exercise-date">—</p></div><span class="schedule-count" id="schedule-count">—</span></div><div id="exercise-list" class="exercise-list"></div></article>
+            <article class="panel weekly-panel"><div class="panel-heading"><div><div class="panel-kicker">LAST 7 DAYS</div><h2>Weekly progress</h2></div></div><div class="chart-wrap weekly-chart"><canvas id="weekly-exercise-chart" aria-label="Exercise completion for the last seven days"></canvas></div><div class="weekly-stat"><strong id="weekly-completion">—</strong><span>completed sessions this week</span></div></article>
+          </div>
+          <div class="category-grid" id="exercise-categories"></div>
+        </section>
+
+        <section class="view-section" id="view-nutrition" data-title="Nutrition">
+          <div class="page-heading"><div><div class="eyebrow">FOOD LOG · FLIGHT DAY 120</div><h1>Nutrition tracker</h1><p>Monitor calcium and vitamin D from fictional station-food examples.</p></div><span class="sim-badge"><i class="fa-solid fa-flask"></i> SIMULATED DATA</span></div>
+          <div class="nutrition-summary-grid">
+            <article class="panel nutrient-card"><div class="nutrient-card-head"><span class="stat-icon cyan"><i class="fa-solid fa-bone"></i></span><span class="panel-kicker">CALCIUM · TODAY</span></div><div class="nutrient-big"><strong id="nutrition-calcium-total">—</strong><span> / 1,000 mg</span></div><div class="progress-track tall"><div class="progress-fill calcium-fill" id="nutrition-calcium-bar"></div></div><p id="nutrition-calcium-caption">Demo tracking target, not a medical limit.</p></article>
+            <article class="panel nutrient-card"><div class="nutrient-card-head"><span class="stat-icon amber"><i class="fa-solid fa-sun"></i></span><span class="panel-kicker">VITAMIN D · TODAY</span></div><div class="nutrient-big"><strong id="nutrition-vitd-total">—</strong><span> / 15 µg</span></div><div class="progress-track tall"><div class="progress-fill vitd-fill" id="nutrition-vitd-bar"></div></div><p>Demo tracking target; no supplement or treatment dose is recommended.</p></article>
+          </div>
+          <div class="nutrition-layout">
+            <article class="panel food-log-panel"><div class="panel-heading"><div><div class="panel-kicker">DAILY FOOD LOG</div><h2>Today’s entries</h2></div><span class="record-count" id="food-count">—</span></div><div id="food-log-list" class="food-log-list"></div><div class="food-total-row"><span>Today’s logged total</span><strong id="food-log-total">—</strong></div>
+              <form id="food-form" class="food-form"><h3>Add food item</h3><div class="food-form-grid"><label>Food item name<input type="text" name="name" maxlength="60" placeholder="e.g. Fortified oat cereal" required></label><label>Calcium (mg)<input type="number" name="calcium" min="0" max="3000" step="1" required></label><label>Vitamin D (µg)<input type="number" name="vitaminD" min="0" max="200" step="0.1" required></label></div><button class="button button-primary" type="submit"><i class="fa-solid fa-plus"></i> Add to today</button><span class="form-feedback" id="food-feedback" aria-live="polite"></span></form>
+            </article>
+            <article class="panel foods-panel"><div class="panel-heading"><div><div class="panel-kicker">SAMPLE STATION FOODS</div><h2>Food reference</h2><p>Illustrative values per serving</p></div></div><div id="food-reference" class="food-reference-list"></div></article>
+          </div>
+          <div class="callout info-callout nutrition-note"><i class="fa-solid fa-circle-info"></i><div><strong>Nutrition information is illustrative</strong><p>Targets are configurable demo values, not official NASA limits or individualized medical guidance. Food composition varies by product and serving.</p></div></div>
+        </section>
+
+        <section class="view-section" id="view-alerts" data-title="Alert center">
+          <div class="page-heading"><div><div class="eyebrow">MISSION HEALTH SIGNALS</div><h1>Alert center</h1><p>Transparent alerts from configurable demo thresholds—not official medical limits.</p></div><button class="button button-quiet" id="mark-all-read"><i class="fa-solid fa-check-double"></i> Mark all read</button></div>
+          <div class="alert-summary-grid" id="alert-summary"></div>
+          <article class="panel alerts-panel"><div class="panel-heading"><div><div class="panel-kicker">CURRENT CONDITIONS</div><h2>Health alerts</h2><p id="alert-description">Generated from the latest simulated health and activity data.</p></div><select id="alert-filter" class="filter-select" aria-label="Filter alerts"><option value="all">All alerts</option><option value="unread">Unread</option><option value="read">Read</option></select></div><div id="alert-list" class="alert-list"></div></article>
+          <div class="threshold-note"><i class="fa-solid fa-sliders"></i><span><strong>Demo thresholds:</strong> calcium 1,000 mg/day; vitamin D 15 µg/day; density decline review trigger 1% across the displayed record range; activity reminder when a planned session is missed. These values are for demonstration only.</span></div>
+        </section>
+
+        <section class="view-section" id="view-gravity" data-title="Gravity lab">
+          <div class="page-heading"><div><div class="eyebrow">RESEARCH EXPLORER</div><h1>Artificial gravity lab</h1><p>Explore how rotation radius and speed relate to a simulated gravity level.</p></div><span class="sim-badge"><i class="fa-solid fa-orbit"></i> EDUCATIONAL SIMULATION</span></div>
+          <div class="callout warning-callout gravity-disclaimer"><i class="fa-solid fa-triangle-exclamation"></i><div><strong>Research concept—not a treatment</strong><p>Artificial gravity is an area of research, not an established daily treatment for bone loss. This page is an educational visualization only; it does not control spacecraft, motors, or real rotation systems.</p></div></div>
+          <div class="gravity-layout">
+            <article class="panel gravity-visual-panel"><div class="panel-heading"><div><div class="panel-kicker">ROTATION CONCEPT</div><h2>Rotating habitat model</h2><p>Illustrative cross-section · not to scale</p></div><span class="orbit-tag"><i class="fa-solid fa-circle-nodes"></i> CONCEPT</span></div>
+              <div class="orbit-stage"><div class="orbit-ring"><div class="orbit-spoke"></div><div class="orbit-hub"><i class="fa-solid fa-satellite"></i></div><div class="orbit-station"><i class="fa-solid fa-user-astronaut"></i></div><div class="orbit-arrow"><i class="fa-solid fa-arrow-rotate-right"></i></div></div><div class="orbit-caption"><span><i class="fa-solid fa-circle"></i> Rotation axis</span><span><i class="fa-solid fa-user-astronaut"></i> Habitat rim</span></div></div>
+              <div class="physics-note"><i class="fa-solid fa-atom"></i><span>In an idealized rotating frame, apparent acceleration depends on angular speed and distance from the axis.</span></div>
+            </article>
+            <article class="panel gravity-controls"><div class="panel-heading"><div><div class="panel-kicker">SIMULATION PARAMETERS</div><h2>Adjust the model</h2></div></div>
+              <label class="range-control"><span>Habitat radius <strong id="radius-label">20 m</strong></span><input id="radius-slider" type="range" min="5" max="100" step="1" value="20"><small>Illustrative radius: 5–100 meters</small></label>
+              <label class="range-control"><span>Rotation rate <strong id="rpm-label">2.00 rpm</strong></span><input id="rpm-slider" type="range" min="0.5" max="6" step="0.05" value="2"><small>Illustrative rate: 0.50–6.00 rotations per minute</small></label>
+              <div class="gravity-result"><span>SIMULATED APPARENT ACCELERATION</span><div><strong id="gravity-value">—</strong><span> g</span></div><small>Calculated from radius and rotation rate using a simplified model.</small></div>
+              <div class="mission-duration"><i class="fa-regular fa-clock"></i><div><span>Mission duration</span><strong>120 days <small>· fictional mission context</small></strong></div></div>
+            </article>
+          </div>
+          <div class="callout info-callout gravity-footnote"><i class="fa-solid fa-book-open"></i><div><strong>Interpretation</strong><p>The simple calculation shown is not a validated human-factors or spacecraft design model. It omits comfort, adaptation, engineering, and operational constraints.</p></div></div>
+        </section>
+      </div>
+    </main>
+  </div>
+  <div class="mobile-scrim" id="mobile-scrim"></div>
+  <div class="toast-region" id="toast-region" aria-live="polite" aria-atomic="true"></div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
